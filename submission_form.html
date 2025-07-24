@@ -1,0 +1,29 @@
+<form id="submitForm" enctype="multipart/form-data">
+  <input id="assignmentId" placeholder="Assignment ID" required>
+  <input id="file" type="file" required>
+  <button type="submit">Submit</button>
+</form>
+
+<script>
+  const token = localStorage.getItem('token');
+  document.getElementById("submitForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const assignmentId = document.getElementById("assignmentId").value;
+    const file = document.getElementById("file").files[0];
+
+    const formData = new FormData();
+    formData.append("assignment", assignmentId);
+    formData.append("file", file);
+
+    const res = await fetch("/api/assignments/submit/", {
+      method: "POST",
+      headers: {
+        "Authorization": `Token ${token}`
+      },
+      body: formData
+    });
+
+    const data = await res.json();
+    console.log(data);
+  });
+</script>
